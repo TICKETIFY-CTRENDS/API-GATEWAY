@@ -14,12 +14,23 @@ public class CorsConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // Frontend URL
-        config.setMaxAge(3600L);
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
 
+        // ✅ Allow all origins (any frontend)
+        config.addAllowedOriginPattern("*");
+
+        // ✅ Allow common HTTP methods
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // ✅ Allow all headers
+        config.setAllowedHeaders(List.of("*"));
+
+        // ❌ When using "*", credentials must be false
+        config.setAllowCredentials(false);
+
+        // ✅ Cache preflight response for 1 hour
+        config.setMaxAge(3600L);
+
+        // ✅ Apply globally
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
