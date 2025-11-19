@@ -23,6 +23,13 @@ spring:
             - RemoveRequestHeader=Authorization
             # Keep public GETs simple (no RL/CircuitBreaker needed)
 
+        - id: event-manager-stripe-webhook
+          uri: http://localhost:5000
+          predicates:
+            - Path=/api/payments/webhook
+          filters:
+            - RemoveRequestHeader=Authorization
+
         # ---------- PROTECTED: everything else under /api/** ----------
         - id: event-manager
           uri: http://localhost:5000
