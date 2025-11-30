@@ -1,21 +1,21 @@
 server:
-  port: ${SERVER_PORT}
+  port: ${SERVER_PORT:5010}
 
 spring:
   application:
-    name: ${SPRING_APPLICATION_NAME}
+    name: ${SPRING_APPLICATION_NAME:api-gateway}
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      timeout: ${REDIS_TIMEOUT}
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: ${REDIS_TIMEOUT:2000ms}
 
   cloud:
     gateway:
       routes:
         # ---------- PUBLIC: Events (must be FIRST) ----------
         - id: event-manager-public
-          uri: ${EVENT_MANAGER_BASE_URL}
+          uri: ${EVENT_MANAGER_BASE_URL:http://localhost:5000}
           predicates:
             - Path=/api/events/**,/api/artists/**,/api/venues/**,/api/business-organizations/**,/api/sponsors/**
             - Method=GET
@@ -24,7 +24,7 @@ spring:
             # Keep public GETs simple (no RL/CircuitBreaker needed)
 
         - id: event-manager-stripe-webhook
-          uri: ${STRIPE_WEBHOOK_URL}
+          uri: ${STRIPE_WEBHOOK_URL:http://localhost:5000}
           predicates:
             - Path=/api/payments/webhook
           filters:
@@ -32,7 +32,7 @@ spring:
 
         # ---------- PROTECTED: everything else under /api/** ----------
         - id: event-manager
-          uri: ${EVENT_MANAGER_BASE_URL}
+          uri: ${EVENT_MANAGER_BASE_URL:http://localhost:5000}
           predicates:
             - Path=/api/**
           filters:
@@ -84,7 +84,7 @@ management:
 # ======== Logging ========
 logging:
   file:
-    name: ${LOG_FILE_PATH}
+    name: logs/gateway.log
   level:
     org.springframework.cloud.gateway: DEBUG
     io.github.resilience4j: DEBUG
