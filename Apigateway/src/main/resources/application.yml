@@ -44,11 +44,11 @@ spring:
 
             # Redis-backed RequestRateLimiter
             # If Redis isn't running locally, comment this whole block.
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 5
-                redis-rate-limiter.burstCapacity: 10
-                redis-rate-limiter.requestedTokens: 1
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 5
+#                redis-rate-limiter.burstCapacity: 10
+#                redis-rate-limiter.requestedTokens: 1
 
 # ======== Resilience4j Configuration ========
 resilience4j:
